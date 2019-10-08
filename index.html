@@ -11,6 +11,9 @@
     <div id="app">
         <h1>ToDoリスト</h1>
         <!--絞り込みラジオボタン-->
+        <label v-for="label in options">
+            <input type="radio" v-model="current" v-bind:value="label.value">{{ label.label }}
+        </label>
         <!--ToDoテーブル-->
         <table>
             <thead>
@@ -23,21 +26,26 @@
             </thead>
             <tbody>
                 <!--[1]ここに<tr>でToDoの要素を1行づつ繰り返し表示したい-->
-                <tr v-for="item in todos" v-bind:key="item.id">
+                <tr v-for="item in computedTodos" v-bind:key="item.id">
                     <!--要素の情報-->
                     <th>{{ item.id }}</th>
                     <th>{{ item.comment }}</th>
                     <td class="state">
                         <!--状態変更ボタンのモック-->
-                        <button>{{ item.state }}</button>
+                        <button v-on:click="doChangeState(item)">
+                            {{ labels[item.state] }}
+                        </button>
                     </td>
                     <td class="button">
                         <!--削除ボタンのモック-->
-                        <button>削除</button>
+                        <button v-on:click.ctrl="doRemove(item)">
+                            削除
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <p>※削除ボタンはコントロールキーを押しながらクリックしてください</p>
         <!--新規登録フォーム-->
         <h2>新しい作業の追加</h2>
         <form class="add-form" v-on:submit.prevent="doAdd">
